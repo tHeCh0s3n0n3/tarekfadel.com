@@ -1,0 +1,15 @@
+name: my-static-websites
+domains:
+- domain: new-website.tarekfadel.com
+  type: PRIMARY
+region: ams3
+static_sites:
+- environment_slug: html
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: tHeCh0s3n0n3/tarekfadel.com
+  name: tarekfadel-com
+  routes:
+  - path: /
+  source_dir: /
