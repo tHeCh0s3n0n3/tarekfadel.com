@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" class="astro-D5J7XPA6">
+	<head>
+		<!-- Global Metadata --><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+<!-- Primary Meta Tags -->
+<title>Creating an Astro list component with pagination</title>
+<meta name="title" content="Creating an Astro list component with pagination">
+<meta name="description" content="How to create an Astro listing component with pagination">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url">
+<meta property="og:title" content="Creating an Astro list component with pagination">
+<meta property="og:description" content="How to create an Astro listing component with pagination">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url">
+<meta property="twitter:title" content="Creating an Astro list component with pagination">
+<meta property="twitter:description" content="How to create an Astro listing component with pagination">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css">
+		
+	<link rel="stylesheet" href="/assets/22df66e9.ac08a98b.css" />
+<link rel="stylesheet" href="/assets/e148472a.d7725fb1.css" /></head>
+
+	<body data-dm-shortcut-enabled="true" data-set-preferred-mode-onload="true" data-sidebar-shortcut-enabled="true" class="with-custom-webkit-scrollbars with-custom-css-scrollbars">
+    <a href="#skip-nav-target" class="sr-only astro-D5J7XPA6">Skip Navigation</a><div class="page-wrapper with-navbar astro-D5J7XPA6">
+			<!-- Navbar (immediate child of the page wrapper) --><nav class="navbar">
+    <!-- Navbar brand -->
+    <a href="https://tarekfadel.com/" class="navbar-brand">
+        TarekFadel.com
+    </a>
+    <!-- Navbar nav -->
+    <ul class="navbar-nav d-md-flex">
+        <!-- d-none = display: none, d-md-flex = display: flex on medium screens and up (width > 768px) -->
+        <li class="nav-item">
+    <a href="/home" class="nav-link">Home</a>
+</li><li class="nav-item">
+    <a href="/projects" class="nav-link">My Projects</a>
+</li>
+        <li class="nav-item dropdown with-arrow">
+            <a class="nav-link" data-toggle="dropdown" id="nav-link-dropdown-toggle-blog">
+                Blog&nbsp;
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-center" aria-labelledby="nav-link-dropdown-toggle-blog">
+                <a href="/posts/" class="dropdown-item">All Posts</a>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-content"><i>Lists</i></div>
+                <a href="/posts/categories" class="dropdown-item">Categories</a>
+                <a href="/posts/years" class="dropdown-item">Years</a>
+                <a href="/posts/months" class="dropdown-item">Months</a>
+            </div>
+        </li>
+    </ul>
+    <div class="navbar-content ml-auto">
+    <button class="btn btn-action" type="button" aria-label="Toggle dark mode" onclick="DarkModeButton_click()">
+        <i class="fa fa-moon" id="darkmode_icon" area-hidden="true"></i>
+    </button>
+</div>
+
+<script>
+    function DarkModeButton_click() {
+        halfmoon.toggleDarkMode();
+        RenderDarkModeButton();
+    }
+
+    function RenderDarkModeButton() {
+        const icon = document.body.querySelector("#darkmode_icon");
+        if (document.body.classList.contains("dark-mode")) {
+            icon.classList.remove("fa-moon");
+            icon.classList.add("fa-sun");
+        }
+        else {
+            icon.classList.remove("fa-sun");
+            icon.classList.add("fa-moon");
+        }
+    }
+</script>
+</nav>
+			<!-- Content wrapper -->
+			<div class="content-wrapper astro-D5J7XPA6">
+				<a id="skip-nav-target" class="d-none astro-D5J7XPA6"></a>
+				<div class="content-fluid astro-D5J7XPA6">
+					<div class="row astro-D5J7XPA6">
+						<div class="col-x1-9"><div class="content"><h2 id="introduction"><a href="#introduction">Introduction</a></h2><p>As a new user to Astro interested in creating my website as a static website. I also wanted
+to create a blog as well with (hopefully) useful information at the very least for my own reference
+down the line.</p><p>This post will show you how to accomplish a listing page which takes information from Frontmatter
+and use that to creating listing pages. Examples of this are listings for posts by year or by category
+both of which are implemented here.</p><p>For the rest of this post we will be using categories as the example, but you can apply this to <em>almost</em>
+any other Frontmatter piece of information</p><h2 id="the-setup"><a href="#the-setup">The Setup</a></h2><p>You will need two Astro components for each type:</p><ol>
+<li>One to list the categories</li>
+<li>One to list the posts belonging to a specific category</li>
+</ol><h3 id="category-list-page"><a href="#category-list-page">Category list page</a></h3><p>To get the category listing page, you simply need to extract the categories
+from all pages and then display them.</p><p>First, let’s look at the Frontmatter which should appear on each post
+markdown file.</p><p><strong>Markdown Post</strong></p><p>Filename: <code>/src/pages/posts/example.md</code></p><pre class="astro-code" style="background-color: #0d1117; overflow-x: auto;"><code><span class="line"><span style="color: #C9D1D9">---</span></span>
+<span class="line"><span style="color: #7EE787">setup</span><span style="color: #C9D1D9">: </span><span style="color: #FF7B72">|</span></span>
+<span class="line"><span style="color: #A5D6FF">  import Layout from &#39;@layouts/BlogPost.astro&#39;</span></span>
+<span class="line"><span style="color: #7EE787">publishDate</span><span style="color: #C9D1D9">: </span><span style="color: #A5D6FF">24 Aug 2022</span></span>
+<span class="line"><span style="color: #7EE787">title</span><span style="color: #C9D1D9">: </span><span style="color: #A5D6FF">Hello World</span></span>
+<span class="line"><span style="color: #7EE787">description</span><span style="color: #C9D1D9">: </span><span style="color: #A5D6FF">How to create an Astro listing component with pagination</span></span>
+<span class="line"><span style="color: #7EE787">name</span><span style="color: #C9D1D9">: </span><span style="color: #A5D6FF">Tarek Fadel</span></span>
+<span class="line"><span style="color: #7EE787">category</span><span style="color: #C9D1D9">: [</span><span style="color: #A5D6FF">Tech</span><span style="color: #C9D1D9">, </span><span style="color: #A5D6FF">Tutorial</span><span style="color: #C9D1D9">]</span></span>
+<span class="line"><span style="color: #C9D1D9">---</span></span>
+<span class="line"><span style="color: #C9D1D9">Hello World!</span></span></code></pre><p>Each Frontmatter field is as follows:</p><table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Field Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>publishDate</td>
+<td>The date (in dd MMM yyyy format) the post was published</td>
+</tr>
+<tr>
+<td>title</td>
+<td>The title of the post</td>
+</tr>
+<tr>
+<td>description</td>
+<td>A short description of the post</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Name of the author</td>
+</tr>
+<tr>
+<td><strong>category</strong></td>
+<td>The categories (in array format) of all categories this post belongs to</td>
+</tr>
+</tbody>
+</table><p><strong>Astro component</strong>
+Filename: <code>/src/pages/posts/categories.astro</code></p><pre class="astro-code" style="background-color: #0d1117; overflow-x: auto;"><code><span class="line"><span style="color: #8B949E">---</span></span>
+<span class="line"><span style="color: #8B949E">// Component Imports</span></span>
+<span class="line"><span style="color: #FF7B72">import</span><span style="color: #C9D1D9"> BlogPostFiltersListing </span><span style="color: #FF7B72">from</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">&#39;@components/BlogPostFiltersListing.astro&#39;</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #8B949E">// Get all posts and sort them in descending order by publish date</span></span>
+<span class="line"><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">sortedAllPosts</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> (</span><span style="color: #FF7B72">await</span><span style="color: #C9D1D9"> Astro.</span><span style="color: #D2A8FF">glob</span><span style="color: #C9D1D9">(</span><span style="color: #A5D6FF">&#39;/src/pages/posts/*.md&#39;</span><span style="color: #C9D1D9">))</span></span>
+<span class="line"><span style="color: #C9D1D9">                                   .</span><span style="color: #D2A8FF">sort</span><span style="color: #C9D1D9">((</span><span style="color: #FFA657">a</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">b</span><span style="color: #C9D1D9">) </span><span style="color: #FF7B72">=&gt;</span><span style="color: #C9D1D9"> a.frontmatter.publishDate.</span><span style="color: #D2A8FF">localeCompare</span><span style="color: #C9D1D9">(b.frontmatter.publishDate));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #8B949E">// Extract all categories from all posts</span></span>
+<span class="line"><span style="color: #FF7B72">let</span><span style="color: #C9D1D9"> allCategories</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">[] </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> [];</span></span>
+<span class="line"><span style="color: #C9D1D9">sortedAllPosts.</span><span style="color: #D2A8FF">map</span><span style="color: #C9D1D9">(</span><span style="color: #FFA657">post</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=&gt;</span><span style="color: #C9D1D9"> {</span></span>
+<span class="line"><span style="color: #C9D1D9">    post.frontmatter.category </span><span style="color: #FF7B72">&amp;&amp;</span><span style="color: #C9D1D9"> post.frontmatter.category.</span><span style="color: #D2A8FF">map</span><span style="color: #C9D1D9">((</span><span style="color: #FFA657">cat</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">) </span><span style="color: #FF7B72">=&gt;</span><span style="color: #C9D1D9"> allCategories.</span><span style="color: #D2A8FF">push</span><span style="color: #C9D1D9">(cat));</span></span>
+<span class="line"><span style="color: #C9D1D9">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #8B949E">// Extract distinct categories</span></span>
+<span class="line"><span style="color: #C9D1D9">allCategories </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> [</span><span style="color: #FF7B72">...new</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">Set</span><span style="color: #C9D1D9">(allCategories)].</span><span style="color: #D2A8FF">sort</span><span style="color: #C9D1D9">((</span><span style="color: #FFA657">a</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">b</span><span style="color: #C9D1D9">) </span><span style="color: #FF7B72">=&gt;</span><span style="color: #C9D1D9"> a.</span><span style="color: #D2A8FF">localeCompare</span><span style="color: #C9D1D9">(b));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">title</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">`Post Categories`</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">description</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">&quot;Listing of all post categories.&quot;</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #8B949E">---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C9D1D9">&lt;</span><span style="color: #7EE787">BlogPostFiltersListing</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">filterList</span><span style="color: #C9D1D9">=</span><span style="color: #FF7B72">{</span><span style="color: #C9D1D9">allCategories</span><span style="color: #FF7B72">}</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">dir</span><span style="color: #C9D1D9">=</span><span style="color: #A5D6FF">&quot;categories&quot;</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">title</span><span style="color: #C9D1D9">=</span><span style="color: #FF7B72">{</span><span style="color: #C9D1D9">title</span><span style="color: #FF7B72">}</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">description</span><span style="color: #C9D1D9">=</span><span style="color: #FF7B72">{</span><span style="color: #C9D1D9">description</span><span style="color: #FF7B72">}</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">permalink</span><span style="color: #C9D1D9">=</span><span style="color: #A5D6FF">&quot;/posts/categories/&quot;</span><span style="color: #C9D1D9"> /&gt;</span></span></code></pre><p>The <code>dir</code> parameter of <code>BlogPostFiltersListing</code> is used to determine which list we are trying to show. This
+has implications if you are going to do more than one listing, but I am skipping it for now (maybe a post
+for the future).</p><p><strong>BlockPostFiltersListing component</strong>
+Filename: <code>@components/BlogPostFiltersListing.astro</code></p><pre class="astro-code" style="background-color: #0d1117; overflow-x: auto;"><code><span class="line"><span style="color: #8B949E">---</span></span>
+<span class="line"><span style="color: #8B949E">// Component Imports</span></span>
+<span class="line"><span style="color: #8B949E">/// &lt;SNIP&gt; ///</span></span>
+<span class="line"><span style="color: #FF7B72">import</span><span style="color: #C9D1D9"> BlogPostFiltersListingItem </span><span style="color: #FF7B72">from</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">&#39;@components/BlogPostFiltersListingItem.astro&#39;</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #FF7B72">export</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">interface</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Props</span><span style="color: #C9D1D9"> {</span></span>
+<span class="line"><span style="color: #C9D1D9">	</span><span style="color: #FFA657">filterList</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">[];</span></span>
+<span class="line"><span style="color: #C9D1D9">	</span><span style="color: #FFA657">dir</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #C9D1D9">    </span><span style="color: #FFA657">title</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #C9D1D9">    </span><span style="color: #FFA657">description</span><span style="color: #FF7B72">?:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #C9D1D9">	</span><span style="color: #FFA657">permalink</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #C9D1D9">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> { </span><span style="color: #79C0FF">filterList</span><span style="color: #C9D1D9">, </span><span style="color: #79C0FF">dir</span><span style="color: #C9D1D9">, </span><span style="color: #79C0FF">title</span><span style="color: #C9D1D9">, </span><span style="color: #79C0FF">description</span><span style="color: #C9D1D9">, </span><span style="color: #79C0FF">permalink</span><span style="color: #C9D1D9">} </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> Astro.props;</span></span>
+<span class="line"><span style="color: #FF7B72">let</span><span style="color: #C9D1D9"> baseUrl </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">&quot;&quot;</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #FF7B72">if</span><span style="color: #C9D1D9"> (dir </span><span style="color: #FF7B72">===</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">&quot;categories&quot;</span><span style="color: #C9D1D9">){</span></span>
+<span class="line"><span style="color: #C9D1D9">	baseUrl </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">&quot;/posts/byCategory&quot;</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #C9D1D9">} </span><span style="color: #FF7B72">else</span><span style="color: #C9D1D9"> {</span></span>
+<span class="line"><span style="color: #C9D1D9">	baseUrl </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">&quot;/posts&quot;</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #C9D1D9">}</span></span>
+<span class="line"><span style="color: #8B949E">---</span></span>
+<span class="line"><span style="color: #8B949E">&lt;!-- SNIP --&gt;</span></span>
+<span class="line"><span style="color: #C9D1D9">&lt;</span><span style="color: #7EE787">div</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">class</span><span style="color: #C9D1D9">=</span><span style="color: #A5D6FF">&quot;container&quot;</span><span style="color: #C9D1D9">&gt;</span></span>
+<span class="line"><span style="color: #C9D1D9">    &lt;</span><span style="color: #7EE787">h1</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">class</span><span style="color: #C9D1D9">=</span><span style="color: #A5D6FF">&quot;page-title&quot;</span><span style="color: #C9D1D9">&gt;</span><span style="color: #FF7B72">{</span><span style="color: #C9D1D9">title</span><span style="color: #FF7B72">}</span><span style="color: #C9D1D9">&lt;/</span><span style="color: #7EE787">h1</span><span style="color: #C9D1D9">&gt;</span></span>
+<span class="line"><span style="color: #C9D1D9">    &lt;</span><span style="color: #7EE787">div</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">class</span><span style="color: #C9D1D9">=</span><span style="color: #A5D6FF">&quot;content&quot;</span><span style="color: #C9D1D9">&gt;</span></span>
+<span class="line"><span style="color: #C9D1D9">        </span><span style="color: #FF7B72">{</span><span style="color: #C9D1D9">filterList.</span><span style="color: #D2A8FF">map</span><span style="color: #C9D1D9">((</span><span style="color: #FFA657">item</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">) </span><span style="color: #FF7B72">=&gt;</span></span>
+<span class="line"><span style="color: #C9D1D9">            &lt;</span><span style="color: #7EE787">BlogPostFiltersListingItem</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">filterItem</span><span style="color: #FF7B72">={</span><span style="color: #C9D1D9">item</span><span style="color: #FF7B72">}</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">baseUrl</span><span style="color: #FF7B72">={</span><span style="color: #C9D1D9">baseUrl</span><span style="color: #FF7B72">}</span><span style="color: #C9D1D9"> /&gt; )</span><span style="color: #FF7B72">}</span></span>
+<span class="line"><span style="color: #C9D1D9">    &lt;/</span><span style="color: #7EE787">div</span><span style="color: #C9D1D9">&gt;</span></span>
+<span class="line"><span style="color: #C9D1D9">&lt;/</span><span style="color: #7EE787">div</span><span style="color: #C9D1D9">&gt;</span></span>
+<span class="line"><span style="color: #8B949E">&lt;!-- SNIP --&gt;</span></span></code></pre><p>This is fairly straight forward. It takes the filter items listing and plops them on
+the page. It uses a listing item component called <code>BlogPostFiltersListingItem</code> to make
+things easier to deal with. I will show that next.</p><p><strong>Filter listing item component</strong>
+Filename: <code>@components/BlogPostFiltersListingItem.astro</code></p><pre class="astro-code" style="background-color: #0d1117; overflow-x: auto;"><code><span class="line"><span style="color: #8B949E">---</span></span>
+<span class="line"><span style="color: #FF7B72">export</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">interface</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Props</span><span style="color: #C9D1D9"> {</span></span>
+<span class="line"><span style="color: #C9D1D9">	</span><span style="color: #FFA657">filterItem</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">any</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #C9D1D9">	</span><span style="color: #FFA657">baseUrl</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #C9D1D9">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #FF7B72">const</span><span style="color: #C9D1D9"> { </span><span style="color: #79C0FF">filterItem</span><span style="color: #C9D1D9">, </span><span style="color: #79C0FF">baseUrl</span><span style="color: #C9D1D9"> } </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> Astro.props;</span></span>
+<span class="line"><span style="color: #FF7B72">let</span><span style="color: #C9D1D9"> url </span><span style="color: #FF7B72">=</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">`${</span><span style="color: #C9D1D9">baseUrl</span><span style="color: #A5D6FF">}/${</span><span style="color: #C9D1D9">filterItem</span><span style="color: #A5D6FF">}`</span><span style="color: #C9D1D9">;</span></span>
+<span class="line"><span style="color: #8B949E">---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C9D1D9">&lt;</span><span style="color: #7EE787">a</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">href</span><span style="color: #C9D1D9">=</span><span style="color: #FF7B72">{</span><span style="color: #C9D1D9">url</span><span style="color: #FF7B72">}</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">class</span><span style="color: #C9D1D9">=</span><span style="color: #A5D6FF">&quot;btn btn-rounded&quot;</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">role</span><span style="color: #C9D1D9">=</span><span style="color: #A5D6FF">&quot;button&quot;</span><span style="color: #C9D1D9">&gt;</span><span style="color: #FF7B72">{</span><span style="color: #C9D1D9">filterItem</span><span style="color: #FF7B72">}</span><span style="color: #C9D1D9">&lt;/</span><span style="color: #7EE787">a</span><span style="color: #C9D1D9">&gt;</span></span></code></pre><p>With that our listing of all possible filter parameters is complete.</p><p><em>Bonus Task: adding a small counter for each category</em></p><h2 id="list-posts-by-category"><a href="#list-posts-by-category">List posts by category</a></h2><p>@TODO FINISH THIS</p></div></div><nav class="col-x1-3 content"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#introduction">Introduction</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#the-setup">The Setup</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#category-list-page">Category list page</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#list-posts-by-category">List posts by category</a></li></ol></nav>
+					</div>
+				</div>
+			</div>
+		</div><script src="https://kit.fontawesome.com/0772ad6b7a.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
+<script>
+    // Wait for the DOM to finish loading
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // DOM is finished loading
+        RenderDarkModeButton();
+    });
+</script>
+</body>
+</html>
