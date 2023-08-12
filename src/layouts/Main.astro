@@ -1,17 +1,23 @@
 ---
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import type { IconDefinition } from "@fortawesome/fontawesome-common-types"
 
 export interface Props {
   pageTitle: string;
+  pageTitleIcon?: IconDefinition;
   pageDesc?: string;
 }
 
-const { pageTitle, pageDesc } = Astro.props;
+const { pageTitle, pageTitleIcon, pageDesc } = Astro.props;
 ---
 
 <Breadcrumbs />
 <main id="main-content">
-  <h1>{pageTitle}</h1>
+  <h1>{pageTitleIcon !== undefined
+       ? <FontAwesomeIcon icon={pageTitleIcon} />
+       : ""
+      } {pageTitle}</h1>
   <p>{pageDesc}</p>
   <slot />
 </main>

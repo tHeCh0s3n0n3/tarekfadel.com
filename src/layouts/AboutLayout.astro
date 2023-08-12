@@ -4,6 +4,8 @@ import Breadcrumbs from "@components/Breadcrumbs.astro";
 import Footer from "@components/Footer.astro";
 import Header from "@components/Header.astro";
 import Layout from "./Layout.astro";
+import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export interface Props {
   frontmatter: {
@@ -20,7 +22,7 @@ const { frontmatter } = Astro.props;
   <Breadcrumbs />
   <main id="main-content">
     <section id="about" class="prose mb-28 max-w-3xl prose-img:border-0">
-      <h1 class="text-2xl tracking-wider sm:text-3xl">{frontmatter.title}</h1>
+      <h1 class="text-2xl tracking-wider sm:text-3xl"><FontAwesomeIcon icon={faQuestionCircle} /> {frontmatter.title}</h1>
       <slot />
     </section>
   </main>
