@@ -37,6 +37,7 @@ export type SocialMedia =
   | "GitLab"
   | "Reddit"
   | "Skype"
+  | "StackExchange"
   | "Steam"
   | "Telegram"
   | "Mastodon";

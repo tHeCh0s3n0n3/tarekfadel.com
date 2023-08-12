@@ -123,6 +123,12 @@ export const SOCIALS: SocialObjects = [
     active: false,
   },
   {
+    name: "StackExchange",
+    href: "https://stackexchange.com/users/162370/tarek-fadel",
+    linkTitle: `profile for ${SITE.author} on Stack Exchange, a network of free, community-driven Q&amp;A sites`,
+    active: true,
+  },
+  {
     name: "Steam",
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: `${SITE.title} on Steam`,
