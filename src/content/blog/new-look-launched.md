@@ -1,6 +1,6 @@
 ---
 author: Tarek Fadel
-pubDatetime: 2011-09-07T12:00:00Z
+pubDatetime: 2011-09-07
 title: New Look Launched
 postSlug: new-look-launched
 featured: false
