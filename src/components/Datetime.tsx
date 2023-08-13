@@ -27,6 +27,20 @@ export default function Datetime({ datetime, size = "sm", className }: Props) {
   );
 }
 
+const nth = (d: number): string => {
+  if (d > 3 && d < 21) return "th";
+  switch (d % 10) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
+  }
+};
+
 const FormattedDatetime = ({ datetime }: { datetime: string | Date }) => {
   const myDatetime = new Date(datetime);
 
@@ -36,6 +50,25 @@ const FormattedDatetime = ({ datetime }: { datetime: string | Date }) => {
       myDatetime.getSeconds() / 60 +
       myDatetime.getTimezoneOffset() !==
     0;
+
+  const formattedDate = new Intl.DateTimeFormat(LOCALE, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+    .formatToParts(myDatetime)
+    .map(part => {
+      if (part.type === "day") {
+        return (
+          <>
+            {part.value}
+            <sup aria-hidden="true">{nth(Number(part.value))}</sup>
+          </>
+        );
+      } else {
+        return <>{part.value}</>;
+      }
+    });
 
   const date = myDatetime.toLocaleDateString(LOCALE, {
     year: "numeric",
@@ -50,7 +83,7 @@ const FormattedDatetime = ({ datetime }: { datetime: string | Date }) => {
 
   return (
     <>
-      {date}
+      {formattedDate}
       {hasTime && (
         <>
           <span className="not-italic" aria-hidden="true">
