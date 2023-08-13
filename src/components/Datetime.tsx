@@ -30,6 +30,13 @@ export default function Datetime({ datetime, size = "sm", className }: Props) {
 const FormattedDatetime = ({ datetime }: { datetime: string | Date }) => {
   const myDatetime = new Date(datetime);
 
+  const hasTime =
+    myDatetime.getHours() * 60 +
+      myDatetime.getMinutes() +
+      myDatetime.getSeconds() / 60 +
+      myDatetime.getTimezoneOffset() !==
+    0;
+
   const date = myDatetime.toLocaleDateString(LOCALE, {
     year: "numeric",
     month: "long",
@@ -44,12 +51,16 @@ const FormattedDatetime = ({ datetime }: { datetime: string | Date }) => {
   return (
     <>
       {date}
-      <span className="not-italic" aria-hidden="true">
-        {" "}
-        |{" "}
-      </span>
-      <span className="sr-only">&nbsp;at&nbsp;</span>
-      {time}
+      {hasTime && (
+        <>
+          <span className="not-italic" aria-hidden="true">
+            {" "}
+            |{" "}
+          </span>
+          <span className="sr-only">&nbsp;at&nbsp;</span>
+          {time}
+        </>
+      )}
     </>
   );
 };
