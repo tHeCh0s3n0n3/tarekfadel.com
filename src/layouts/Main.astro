@@ -33,3 +33,20 @@ const { pageTitle, pageTitleIcon, pageDesc } = Astro.props;
     @apply mb-6 mt-2 italic;
   }
 </style>
+
+<style is:global>
+  code {
+    counter-reset: step;
+    counter-increment: step 0;
+  }
+
+  code .line::before {
+    content: counter(step);
+    counter-increment: step;
+    width: 1rem;
+    margin-right: 1.5rem;
+    display: inline-block;
+    text-align: right;
+    color: rgba(253,216,53,1)
+  }
+</style>
