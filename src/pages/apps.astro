@@ -1,0 +1,115 @@
+---
+import { CollectionEntry, getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Card from "@components/Card";
+import Hr from "@components/Hr.astro";
+import getUniqueTags from "@utils/getUniqueTags";
+import getPostsByTag from "@utils/getPostsByTag";
+import getPostsExcludingTag from "@utils/getPostsExcludingTag"
+import slugify from "@utils/slugify";
+import { SITE } from "@config";
+import getSortedPosts from "@utils/getSortedPosts";
+
+export interface Props {
+  post: CollectionEntry<"blog">;
+  tag: string;
+}
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+
+  const tags = getUniqueTags(posts);
+
+  return tags.map(tag => {
+    return {
+      params: { tag },
+      props: { tag },
+    };
+  });
+}
+
+const tag = "myapps"
+const oldTag = "deprecated"
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+const allAppPosts = getPostsByTag(posts, tag);
+
+const currentAppsPosts = getPostsExcludingTag(allAppPosts, oldTag);
+const oldAppsPosts = getPostsByTag(allAppPosts, oldTag);
+
+const sortCurrentAppsPosts = getSortedPosts(currentAppsPosts);
+const sortOldAppsPosts = getSortedPosts(oldAppsPosts);
+---
+
+<Layout title={`Applications I've Written | ${SITE.title}`}>
+  <Header activeNav="apps" />
+  <Main
+    pageTitle={`Applications I've Written`}
+    pageDesc={`I love writing code!.`}
+  >
+    <section>
+      <p>
+        The sense of accomplishment you get from creating something is worth all
+        the tears and frustration. To be able to do that I need to keep my skills
+        sharp by parcticing what I know and (arguably more importantly) keep learning.
+      </p>
+      <br />
+      <p>
+        This has lead to many projects in different languages/frameworks. Some of them
+        are still under active development/maintenence and others have dropped by the
+        wayside.
+      </p>
+      <br />
+      <p>
+        Below are what I've created seprated into 2 sections, active apps which are still
+        being developed/maintained and inactive/deprecated apps.
+      </p>
+    </section>
+    <section id="active-apps">
+      <h2>Active Apps</h2>
+        {sortCurrentAppsPosts.length > 0
+          ? <ul>
+              {
+                sortCurrentAppsPosts.map(({ data }) => (
+                  <Card href={`/posts/${slugify(data)}`} frontmatter={data} />
+                ))
+              }
+            </ul>
+          : <p class="italic">None</p>
+        }
+    </section>
+    <br />
+    <Hr />
+    <br />
+    <section id="inactive-apps">
+      <h2>Inactive Apps (deprecated)</h2>
+      {sortOldAppsPosts.length > 0
+        ? <ul>
+            {
+              sortOldAppsPosts.map(({ data }) => (
+                <Card href={`/posts/${slugify(data)}`} frontmatter={data} />
+              ))
+            }
+          </ul>
+        : <p class="italic">None</p>
+      }
+    </ul>
+    </section>
+  </Main>
+  <Footer />
+</Layout>
+
+<style>
+  #active-apps,
+  #inactive-apps {
+    @apply pb-6 pt-12;
+  }
+  #active-apps h2,
+  #inactive-apps h2 {
+    @apply text-2xl font-semibold tracking-wide;
+  }
+</style>

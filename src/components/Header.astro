@@ -3,13 +3,13 @@ import { LOGO_IMAGE, SITE } from "@config";
 import Hr from "./Hr.astro";
 import LinkButton from "./LinkButton.astro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faHome, faPencil, faTags, faQuestionCircle } from "@fortawesome/free-solid-svg-icons"
+import { faHome, faPencil, faTags, faQuestionCircle, faRocket } from "@fortawesome/free-solid-svg-icons"
 
 import logoPNG from "/assets/logo.png";
 import logoSVG from "/assets/logo.svg";
 
 export interface Props {
-  activeNav?: "home" | "posts" | "tags" | "about" | "search";
+  activeNav?: "home" | "posts" | "tags" | "apps" | "about" | "search";
 }
 
 const { activeNav } = Astro.props;
@@ -73,6 +73,11 @@ const { activeNav } = Astro.props;
           <li>
             <a href="/tags" class={activeNav === "tags" ? "active" : ""}>
               <FontAwesomeIcon icon={faTags} /> Tags
+            </a>
+          </li>
+          <li>
+            <a href="/apps" class={activeNav === "apps" ? "active" : ""}>
+              <FontAwesomeIcon icon={ faRocket } /> Apps
             </a>
           </li>
           <li>
