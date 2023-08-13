@@ -275,6 +275,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"ssl-has-been-enabled.md": {
+	id: "ssl-has-been-enabled.md";
+  slug: "ssl-has-been-enabled";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "tailwind-typography.md": {
 	id: "tailwind-typography.md";
   slug: "tailwind-typography";
