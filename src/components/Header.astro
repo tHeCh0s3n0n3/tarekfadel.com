@@ -29,7 +29,7 @@ const { activeNav } = Astro.props;
               height={LOGO_IMAGE.height}
             />
           ) : (
-            SITE.title
+            <span class="text-skin-accent">{SITE.title}</span>
           )
         }
       </a>
