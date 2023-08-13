@@ -219,6 +219,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"d20-init-and-hp-tracker.md": {
+	id: "d20-init-and-hp-tracker.md";
+  slug: "d20-init-and-hp-tracker";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "dynamic-og-images.md": {
 	id: "dynamic-og-images.md";
   slug: "dynamic-og-images";
