@@ -191,6 +191,13 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"blog": {
+"aaaa-new-post-template.md": {
+	id: "aaaa-new-post-template.md";
+  slug: "aaaa-new-post-template";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "adding-new-post.md": {
 	id: "adding-new-post.md";
   slug: "adding-new-post";
@@ -264,6 +271,13 @@ declare module 'astro:content' {
 "predefined-color-schemes.md": {
 	id: "predefined-color-schemes.md";
   slug: "predefined-color-schemes";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"quick-m-parking.md": {
+	id: "quick-m-parking.md";
+  slug: "quick-m-parking";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
