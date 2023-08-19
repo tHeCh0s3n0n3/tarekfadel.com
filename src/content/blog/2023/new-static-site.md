@@ -1,6 +1,7 @@
 ---
 author: Tarek Fadel
 pubDatetime: 2023-08-14
+updatedDateTime: 2023-08-19T19:39:33+04:00
 title: New Static Site
 postSlug: new-static-site
 featured: true
@@ -247,9 +248,9 @@ Some of tweaks I did:
 
 ## Next Steps
 
-- Publish this in GitHub (WIP)
-- Use GitHub actions to generate it every time I push (Easy)
-- Find a way to automatically pull down the latest "release" once it's available (no idea how... yet)
+- Publish this on GitHub ([Done](https://github.com/tHeCh0s3n0n3/tarekfadel.com))
+- Use GitHub actions to generate it every time I push (Done)
+- Find a way to automatically pull down the latest "release" once it's available (Done _article coming soon!_)
 
 ## Conclusion
 
