@@ -12,7 +12,8 @@
     "format": "prettier --plugin-search-dir=. --write .",
     "cz": "cz",
     "prepare": "husky install",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "deploy": "git rebase origin/main deploy && git push origin/deploy"
   },
   "dependencies": {
     "@astrojs/rss": "^2.4.1",
