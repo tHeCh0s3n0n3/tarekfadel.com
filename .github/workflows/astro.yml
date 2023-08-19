@@ -80,11 +80,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: astro-output
+          path: ./dist/
 
-      - name: Show downloaded artifact
-        run: |
-          pwd
-          ls -R
+      # - name: Show downloaded artifact
+      #   run: |
+      #     pwd
+      #     ls -R
 
       - name: Set up SSH Stuff
         env:
