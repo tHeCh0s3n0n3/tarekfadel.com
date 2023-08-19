@@ -1,7 +1,7 @@
 ---
 author: Tarek Fadel
 pubDatetime: 2023-08-14
-updatedDateTime: 2023-08-19T19:39:33+04:00
+updateDatetime: 2023-08-19T19:39:33+04:00
 title: New Static Site
 postSlug: new-static-site
 featured: true
