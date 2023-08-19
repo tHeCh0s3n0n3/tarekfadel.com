@@ -81,8 +81,10 @@ jobs:
         with:
           name: astro-output
 
-      #- name: Show downloaded artifact
-      #  run: ls -R
+      - name: Show downloaded artifact
+        run: |
+          pwd
+          ls -R
 
       - name: Set up SSH Stuff
         env:
