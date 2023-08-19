@@ -81,17 +81,26 @@ jobs:
         with:
           name: astro-output
 
-      - name: Show downloaded artifact
-        run: ls -R
+      #- name: Show downloaded artifact
+      #  run: ls -R
 
-      - name: Set up Private Key
+      - name: Set up SSH Stuff
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          echo ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}{% endraw%} > ~/.ssh/id_rsa
+          mkdir -p /home/runner/.ssh
+          ssh-keyscan -H ${{ secrets.DEPLOY_HOST }}{% endraw%} >> /home/runner/.ssh/known_hosts
+          echo "${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}" > /home/runner/.ssh/id_rsa
+          chmod 600 /home/runner/.ssh/id_rsa
+          ssh-agent -a $SSH_AUTO_SOCK > /dev/null
+          ssp-add /home/runner/.ssh/id_rsa
 
       - name: Set up Known-hosts
         run: |
           ssh-keyscan -H ${{ secrets.DEPLOY_HOST }}{% endraw%} >> ~/.ssh/known_hosts
 
       - name: Deploy build using rsync
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           rsync -avz ./dist/ ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_HOST }}:/home/${{ secrets.DEPLOY_USERNAME }}/deploy/
