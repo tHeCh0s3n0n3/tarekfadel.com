@@ -92,4 +92,4 @@ jobs:
 
       - name: Deploy build using rsync
         run: |
-          rsync -avz ./dist/ ${{ secrets.SSH_USER}}@${{ secrets.DEPLOY_HOST }}:/home/${{ secrets.SSH_USER }}/deploy/
+          rsync -avz ./dist/ ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_HOST }}:/home/${{ secrets.DEPLOY_USERNAME }}/deploy/
