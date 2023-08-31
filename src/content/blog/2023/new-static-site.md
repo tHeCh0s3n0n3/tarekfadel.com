@@ -186,19 +186,19 @@ Too many new concepts to learn and v2 was in alpha so I was also fighting breaki
 and v1 documentation.
 
 After a few weeks spent trying to get it to work, I abandoned the attempt (I think it was
-#3 at that point).
+ #3 at that point).
 
 Some time later, and after much reflection, I decided that I needed to learn more basic
-concepts such as a javascript front-end framework like AngularJS/ReactJS/VueJS. After
+concepts such as a JavaScript front-end framework like AngularJS/ReactJS/VueJS. After
 much hemming and hawing (and a fair bit of research) I decided to go with ReactJS.
 AngularJS seemed too opinionated to me and VueJS was too new and I didn't want to have
 a repeat of my Astro experience.
 
 So I took a couple of ReadJS courses on [PluralSight](https://www.pluralsight.com/)
 and then used [this great tutorial](https://handsonreact.com/) to have some hands-on with
-ReactJS. I also learned typescript since that appealed to me as someone coming from a
+ReactJS. I also learned TypeScript since that appealed to me as someone coming from a
 background of strongly typed languages (C/C++/C#) and who has been bitten by
-many logic bugs involving loosely typed languages (PHP/Python/Javascript).
+many logic bugs involving loosely typed languages (PHP/Python/JavaScript).
 
 Serendipity struck again and I was made aware of a "game" called
 [Space Traders API](https://spacetraders.io/ "A unique multiplayer game built on a free Web API").
