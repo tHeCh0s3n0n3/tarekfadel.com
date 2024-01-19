@@ -127,4 +127,3 @@ rsync -a --stats $TEMP_WORKING_DIR $DEST_DIR
 
 rm -r $TEMP_WORKING_DIR
 ```
-
