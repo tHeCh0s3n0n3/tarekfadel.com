@@ -1,9 +1,9 @@
 import type { Site, SocialObjects } from "./types";
 
 export const SITE: Site = {
-  website: "https://tarekfade.com/",
+  website: "https://tarekfadel.com/",
   author: "Tarek Fadel",
-  desc: "My little slice of the Internet.",
+  desc: "My tiny little slice of the Internet. It may not be much, but it's mine!",
   title: "TarekFadel.com",
   ogImage: "favicon.png",
   lightAndDarkMode: true,
