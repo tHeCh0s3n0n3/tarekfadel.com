@@ -3,6 +3,9 @@
         "Datetime",
         "riiiiight",
         "rrsync",
-        "Webserver"
+        "Webserver",
+        "ogImage",
+        "rsync",
+        "rrsync"
     ]
 }

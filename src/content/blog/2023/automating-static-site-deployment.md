@@ -4,7 +4,7 @@ pubDatetime: 2023-08-29
 title: Automating Static Site Deployment
 postSlug: automating-static-site-deployment
 featured: true
-draft: true
+draft: false
 tags:
   - automation
   - learning
@@ -64,4 +64,66 @@ THe solution I cobbled together is as follows:
   - The service should call the shell script created above
   - The timer should run on a schedule (think `cron`, but make it `systemd`)
 
-With all that done, everything is now set up and a push to the deploy branch results in my website being updated within 10 minutes.
+With all that done, everything is now set up and a push to the _'deploy'_ branch results in my website being updated within 10 minutes.
+
+### Create a deploy branch
+
+In the root of your `git` project, simply create a new branch:
+
+``` bash
+user$ git checkout -b deploy
+user$ git push
+```
+
+### Create a new unprivileged user
+
+Depending on your OS, the method will differ. The instructions below are for Ubuntu.
+
+``` bash
+root# useradd --create-home github-deploy
+```
+
+### Create an SSH key for the new user
+
+Creating an SSH key using the usual method, then copy the public key to `authorized_keys`.
+
+``` bash
+github-deploy$ ssh-keygen -m PEM -t rsa -b 4096
+github-deploy$ cp id_rsa.pub authorized_keys
+```
+
+Once that is done, copy the private key (located at `/home/github-deploy/.ssh/id_rsa`) as it will be used later.
+
+### Restrict the SSH key to allow a single command
+
+For security purposes, I wanted to restrict the access the `github-deploy` user has. Do to this I used the mechanism
+built in to OpenSSH which allows restricting specific authorized keys to a single command.
+
+To accomplish this, add the following at the beginning of the relevant key in `/home/github-deploy/.ssh/authorized_keys`
+file.
+
+``` authorized_keys
+command="/usr/bin/rrsync -wo /home/github-deploy/deploy/",restrict ssh-rsa AAAAB3NzaC....
+```
+
+With that done, the github-deploy user can only use rrsync (yes, that's a double 'r' for "remote rsync").
+
+### Configure GitHub
+
+### Create a script to deploy pushed files
+
+``` bash
+#!/bin/bash
+
+SOURCE_DIR=/home/github-deploy/deploy/
+TEMP_WORKING_DIR=/tmp/WEBSITE.tmp/
+DEST_DIR=/var/www/
+
+mkdir -p $TEMP_WORKING_DIR
+
+rsync -a $SOURCE_DIR $TEMP_WORKING_DIR
+chown -R www-data:www-data $TEMP_WORKING_DIR
+rsync -a --stats $TEMP_WORKING_DIR $DEST_DIR
+
+rm -r $TEMP_WORKING_DIR
+```
