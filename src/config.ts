@@ -5,7 +5,7 @@ export const SITE: Site = {
   author: "Tarek Fadel",
   desc: "My little slice of the Internet.",
   title: "TarekFadel.com",
-  ogImage: "astropaper-og.jpg",
+  ogImage: "favicon.png",
   lightAndDarkMode: true,
   postPerPage: 10,
 };
