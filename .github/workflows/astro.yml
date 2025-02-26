@@ -21,7 +21,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  BUILD_PATH: "." # default value when not using subfolders
+  BUILD_PATH: "." # default value when not using sub-folders
   # BUILD_PATH: subfolder
 
 jobs:
