@@ -53,9 +53,12 @@ declare module 'astro:content' {
 
 	type BaseSchemaWithoutEffects =
 		| import('astro/zod').AnyZodObject
-		| import('astro/zod').ZodUnion<[BaseSchemaWithoutEffects, ...BaseSchemaWithoutEffects[]]>
+		| import('astro/zod').ZodUnion<import('astro/zod').AnyZodObject[]>
 		| import('astro/zod').ZodDiscriminatedUnion<string, import('astro/zod').AnyZodObject[]>
-		| import('astro/zod').ZodIntersection<BaseSchemaWithoutEffects, BaseSchemaWithoutEffects>;
+		| import('astro/zod').ZodIntersection<
+				import('astro/zod').AnyZodObject,
+				import('astro/zod').AnyZodObject
+		  >;
 
 	type BaseSchema =
 		| BaseSchemaWithoutEffects
@@ -212,6 +215,13 @@ declare module 'astro:content' {
 "2016/ssl-has-been-enabled.md": {
 	id: "2016/ssl-has-been-enabled.md";
   slug: "2016/ssl-has-been-enabled";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"2023/automating-static-site-deployment.md": {
+	id: "2023/automating-static-site-deployment.md";
+  slug: "2023/automating-static-site-deployment";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
