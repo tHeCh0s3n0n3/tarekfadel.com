@@ -24,10 +24,11 @@ const { activeNav } = Astro.props;
           LOGO_IMAGE.enable ? (
             <img
               src={LOGO_IMAGE.svg ? logoSVG : logoPNG}
-              alt="AstroPaper Logo"
+              alt={SITE.title}
+              title={SITE.title}
               width={LOGO_IMAGE.width}
               height={LOGO_IMAGE.height}
-            />
+              style={"width: " + LOGO_IMAGE.width + "px; height: " + LOGO_IMAGE.height + "px;"} />
           ) : (
             <span class="text-skin-accent">{SITE.title}</span>
           )
