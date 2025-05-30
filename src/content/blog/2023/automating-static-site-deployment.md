@@ -70,7 +70,7 @@ With all that done, everything is now set up and a push to the _'deploy'_ branch
 
 In the root of your `git` project, simply create a new branch:
 
-``` bash
+```bash
 user$ git checkout -b deploy
 user$ git push
 ```
@@ -79,7 +79,7 @@ user$ git push
 
 Depending on your OS, the method will differ. The instructions below are for Ubuntu.
 
-``` bash
+```bash
 root# useradd --create-home github-deploy
 ```
 
@@ -87,7 +87,7 @@ root# useradd --create-home github-deploy
 
 Creating an SSH key using the usual method, then copy the public key to `authorized_keys`.
 
-``` bash
+```bash
 github-deploy$ ssh-keygen -m PEM -t rsa -b 4096
 github-deploy$ cp id_rsa.pub authorized_keys
 ```
@@ -102,7 +102,7 @@ built in to OpenSSH which allows restricting specific authorized keys to a singl
 To accomplish this, add the following at the beginning of the relevant key in `/home/github-deploy/.ssh/authorized_keys`
 file.
 
-``` authorized_keys
+```sh
 command="/usr/bin/rrsync -wo /home/github-deploy/deploy/",restrict ssh-rsa AAAAB3NzaC....
 ```
 
@@ -112,7 +112,7 @@ With that done, the github-deploy user can only use rrsync (yes, that's a double
 
 ### Create a script to deploy pushed files
 
-``` bash
+```bash
 #!/bin/bash
 
 SOURCE_DIR=/home/github-deploy/deploy/
